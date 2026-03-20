@@ -1,43 +1,44 @@
-#include <stdio.h>
 #include "magicSquare.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-bool isLoShuMagicSquare(int square[SIZE][SIZE]) {
-    int magicSum = 15; // sum of rows, columns, and diagonals for 3x3 Lo Shu
-    int sum;
-
+int isLoShu(int square[3][3]) {
+    int magicSum = 15; // sum for 3x3 Lo Shu
     // Check rows
-    for(int i = 0; i < SIZE; i++){
-        sum = 0;
-        for(int j = 0; j < SIZE; j++)
-            sum += square[i][j];
-        if(sum != magicSum) return false;
+    for(int i=0;i<3;i++){
+        int rowSum = 0;
+        for(int j=0;j<3;j++)
+            rowSum += square[i][j];
+        if(rowSum != magicSum) return 0;
     }
-
     // Check columns
-    for(int j = 0; j < SIZE; j++){
-        sum = 0;
-        for(int i = 0; i < SIZE; i++)
-            sum += square[i][j];
-        if(sum != magicSum) return false;
+    for(int j=0;j<3;j++){
+        int colSum = 0;
+        for(int i=0;i<3;i++)
+            colSum += square[i][j];
+        if(colSum != magicSum) return 0;
     }
-
     // Check diagonals
-    sum = square[0][0] + square[1][1] + square[2][2];
-    if(sum != magicSum) return false;
+    if(square[0][0]+square[1][1]+square[2][2] != magicSum) return 0;
+    if(square[0][2]+square[1][1]+square[2][0] != magicSum) return 0;
 
-    sum = square[0][2] + square[1][1] + square[2][0];
-    if(sum != magicSum) return false;
-
-    return true;
+    return 1;
 }
 
-void printSquare(int square[SIZE][SIZE]){
-    for(int i = 0; i < SIZE; i++){
-        printf("[");
-        for(int j = 0; j < SIZE; j++){
-            printf("%d", square[i][j]);
-            if(j < SIZE - 1) printf(" ");
+void printSquare(int square[3][3]){
+    for(int i=0;i<3;i++){
+        printf("[%d %d %d]\n", square[i][0], square[i][1], square[i][2]);
+    }
+}
+
+void fillRandomSquare(int square[3][3]){
+    int used[10] = {0}; // index 1-9
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            int n;
+            do { n = rand()%9 + 1; } while(used[n]);
+            used[n] = 1;
+            square[i][j] = n;
         }
-        printf("]\n");
     }
 }
