@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "employee.h"
-
-// declared in employeeOne.c
-PtrToEmployee searchEmployeeByNumber(const Employee table[], int sizeTable, long numberToFind);
-PtrToEmployee searchEmployeeByName(const Employee table[], int sizeTable, char *nameToFind);
-PtrToEmployee searchEmployeeByPhone(const Employee table[], int sizeTable, char *phoneToFind);
-PtrToEmployee searchEmployeeBySalary(const Employee table[], int sizeTable, double salaryToFind);
+#include "employeeTwo.h"  // Include header for generic search
 
 // declared in employeeTable.c
 extern Employee EmployeeTable[];
@@ -16,54 +11,64 @@ int main(void) {
     PtrToEmployee matchPtr;
 
     printf("=== Testing search by ID ===\n");
-    // example match
-    matchPtr = searchEmployeeByNumber(EmployeeTable, EmployeeTableEntries, 1001);
+    long idMatch = 1001;
+    long idNoMatch = 9999;
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchByNumber, &idMatch);
     if(matchPtr)
-        printf("Employee ID 1001 found at record %d: %s\n", (int)(matchPtr - EmployeeTable), matchPtr->name);
+        printf("Employee ID %ld found at record %d: %s\n", idMatch, (int)(matchPtr - EmployeeTable), matchPtr->name);
     else
-        printf("Employee ID 1001 NOT found\n");
-    // example no match
-    matchPtr = searchEmployeeByNumber(EmployeeTable, EmployeeTableEntries, 9999);
+        printf("Employee ID %ld NOT found\n", idMatch);
+
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchByNumber, &idNoMatch);
     if(matchPtr)
-        printf("Employee ID 9999 found at record %d: %s\n", (int)(matchPtr - EmployeeTable), matchPtr->name);
+        printf("Employee ID %ld found at record %d: %s\n", idNoMatch, (int)(matchPtr - EmployeeTable), matchPtr->name);
     else
-        printf("Employee ID 9999 NOT found\n");
+        printf("Employee ID %ld NOT found\n", idNoMatch);
 
     printf("\n=== Testing search by Name ===\n");
-    matchPtr = searchEmployeeByName(EmployeeTable, EmployeeTableEntries, "Tony Bobcat"); // match
+    char *nameMatch = "Tony Bobcat";
+    char *nameNoMatch = "Jane Doe";
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchByName, nameMatch);
     if(matchPtr)
-        printf("Employee Tony Bobcat found at record %d\n", (int)(matchPtr - EmployeeTable));
+        printf("Employee %s found at record %d\n", nameMatch, (int)(matchPtr - EmployeeTable));
     else
-        printf("Employee Tony Bobcat NOT found\n");
-    matchPtr = searchEmployeeByName(EmployeeTable, EmployeeTableEntries, "Jane Doe"); // no match
+        printf("Employee %s NOT found\n", nameMatch);
+
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchByName, nameNoMatch);
     if(matchPtr)
-        printf("Employee Jane Doe found at record %d\n", (int)(matchPtr - EmployeeTable));
+        printf("Employee %s found at record %d\n", nameNoMatch, (int)(matchPtr - EmployeeTable));
     else
-        printf("Employee Jane Doe NOT found\n");
+        printf("Employee %s NOT found\n", nameNoMatch);
 
     printf("\n=== Testing search by Phone ===\n");
-    matchPtr = searchEmployeeByPhone(EmployeeTable, EmployeeTableEntries, "909-555-1235"); // match
+    char *phoneMatch = "909-555-1235";
+    char *phoneNoMatch = "555-0000";
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchByPhone, phoneMatch);
     if(matchPtr)
-        printf("Employee with phone 909-555-1235 found at record %d\n", (int)(matchPtr - EmployeeTable));
+        printf("Employee with phone %s found at record %d\n", phoneMatch, (int)(matchPtr - EmployeeTable));
     else
-        printf("Employee with phone 909-555-1235 NOT found\n");
-    matchPtr = searchEmployeeByPhone(EmployeeTable, EmployeeTableEntries, "555-0000"); // no match
+        printf("Employee with phone %s NOT found\n", phoneMatch);
+
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchByPhone, phoneNoMatch);
     if(matchPtr)
-        printf("Employee with phone 555-0000 found at record %d\n", (int)(matchPtr - EmployeeTable));
+        printf("Employee with phone %s found at record %d\n", phoneNoMatch, (int)(matchPtr - EmployeeTable));
     else
-        printf("Employee with phone 555-0000 NOT found\n");
+        printf("Employee with phone %s NOT found\n", phoneNoMatch);
 
     printf("\n=== Testing search by Salary ===\n");
-    matchPtr = searchEmployeeBySalary(EmployeeTable, EmployeeTableEntries, 6.34); // match
+    double salaryMatch = 6.34;
+    double salaryNoMatch = 9.99;
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchBySalary, &salaryMatch);
     if(matchPtr)
-        printf("Employee with salary 6.34 found at record %d: %s\n", (int)(matchPtr - EmployeeTable), matchPtr->name);
+        printf("Employee with salary %.2f found at record %d: %s\n", salaryMatch, (int)(matchPtr - EmployeeTable), matchPtr->name);
     else
-        printf("Employee with salary 6.34 NOT found\n");
-    matchPtr = searchEmployeeBySalary(EmployeeTable, EmployeeTableEntries, 9.99); // no match
+        printf("Employee with salary %.2f NOT found\n", salaryMatch);
+
+    matchPtr = searchEmployeeGeneric(EmployeeTable, EmployeeTableEntries, matchBySalary, &salaryNoMatch);
     if(matchPtr)
-        printf("Employee with salary 9.99 found at record %d: %s\n", (int)(matchPtr - EmployeeTable), matchPtr->name);
+        printf("Employee with salary %.2f found at record %d: %s\n", salaryNoMatch, (int)(matchPtr - EmployeeTable), matchPtr->name);
     else
-        printf("Employee with salary 9.99 NOT found\n");
+        printf("Employee with salary %.2f NOT found\n", salaryNoMatch);
 
     return EXIT_SUCCESS;
 }
