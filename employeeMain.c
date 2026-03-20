@@ -6,6 +6,7 @@
 PtrToEmployee searchEmployeeByNumber(const Employee table[], int sizeTable, long numberToFind);
 PtrToEmployee searchEmployeeByName(const Employee table[], int sizeTable, char *nameToFind);
 PtrToEmployee searchEmployeeByPhone(const Employee table[], int sizeTable, char *phoneToFind);
+PtrToEmployee searchEmployeeBySalary(const Employee table[], int sizeTable, double salaryToFind);
 
 // declared in employeeTable.c
 extern Employee EmployeeTable[];
@@ -46,6 +47,19 @@ int main(void) {
         else
             printf("Employee with phone %s NOT found\n", phone);
     }
+
+    printf("\n=== Testing search by Salary ===\n");
+        matchPtr = searchEmployeeBySalary(EmployeeTable, EmployeeTableEntries, 6.34);
+        if(matchPtr != NULL)
+            printf("Employee with salary 6.34 found at record %d: %s\n", (int)(matchPtr - EmployeeTable), matchPtr->name);
+        else
+            printf("Employee with salary 6.34 NOT found\n");
+
+        matchPtr = searchEmployeeBySalary(EmployeeTable, EmployeeTableEntries, 9.99);
+        if(matchPtr != NULL)
+            printf("Employee with salary 9.99 found at record %d: %s\n", (int)(matchPtr - EmployeeTable), matchPtr->name);
+        else
+            printf("Employee with salary 9.99 NOT found\n");
 
     return EXIT_SUCCESS;
 }
